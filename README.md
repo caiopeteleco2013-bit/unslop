@@ -1,70 +1,63 @@
-# unslop
+# unslop (opencode)
 
-Created by Damir Sokolovsky ([@heydamir](https://x.com/heydamir)), who started the [Unslopping series](https://x.com/heydamir/status/2115063463063998736) on X.
+A fork/adaptação do [heydamir/unslop](https://github.com/heydamir/unslop) para o [OpenCode](https://opencode.ai).
 
-![A vibecoded dashboard unslopping itself, frame by frame](skills/unslop/references/refs/story-dashboard-frames.webp)
+unslop é uma skill que transforma interfaces com "cara de IA" (vibecoded UI — gradientes roxos, glows, rótulos com emoji, copy gritante, espaçamento aleatório) em uma interface projetada com caráter próprio. Ela audita a tela, define uma direção a partir do produto e corrige espaçamento, cor, ícones, copy, tipografia, layout, detalhes, visuais e movimento — nessa ordem.
 
-unslop is a skill for Claude Code and Codex that turns vibecoded, AI-looking UI into a designed interface with its own character. It finds the slop first, the purple gradients, glows, emoji labels, shouty copy and uneven spacing, then sets a direction from your product and fixes the screen pass by pass like a designer doing a redline review. It works in whatever your screen is built with, like Next.js, React, Vue, Svelte, Tailwind or plain HTML and CSS, on dashboards, apps and landing pages, and even on a live site when all you have is a link.
+Criado por Damir Sokolovsky ([@heydamir](https://x.com/heydamir)). Licenciado sob [CC BY 4.0](LICENSE).
 
-## Install
+## Instalação no OpenCode
 
-For Claude Code, copy the skill into your skills folder.
+O OpenCode carrega skills automaticamente de `.opencode/skills/` dentro do projeto ou de `~/.config/opencode/skills/` globalmente.
 
-```bash
-git clone https://github.com/heydamir/unslop
-mkdir -p ~/.claude/skills && cp -r unslop/skills/unslop ~/.claude/skills/
-```
+### Por projeto (recomendado)
 
-For a single project, copy it into `.claude/skills/` inside that project instead.
-
-For Codex, ask it to install the skill straight from this repo.
-
-```
-$skill-installer install https://github.com/heydamir/unslop/tree/main/skills/unslop
-```
-
-Or copy it by hand into `~/.agents/skills/`, or into `.agents/skills/` inside a single project.
+Clone este repo dentro do seu projeto (ou copie apenas a pasta da skill):
 
 ```bash
-git clone https://github.com/heydamir/unslop
-mkdir -p ~/.agents/skills && cp -r unslop/skills/unslop ~/.agents/skills/
+# a partir da raiz do seu projeto
+git clone https://github.com/SEU_USUARIO/unslop.git
 ```
 
-To snapshot a live site or create a story video, install Playwright and its Chromium browser from the project directory where you run the skill:
+Isso coloca a skill em `seu-projeto/.opencode/skills/unslop/SKILL.md`. O OpenCode descobre e anuncia a skill automaticamente.
+
+### Global (disponível em todo projeto)
 
 ```bash
-npm install -D playwright
-npx playwright install chromium
+mkdir -p ~/.config/opencode/skills
+git clone https://github.com/SEU_USUARIO/unslop.git ~/.config/opencode/skills/unslop
 ```
 
-Story videos also require ffmpeg installed and available on your PATH.
+## Como usar
 
-## Use
+Quando quiser redesenhar uma tela, peça ao agente:
 
-In Claude Code, type `/unslop` with what you want. In Codex, type `$unslop` the same way. Or just ask in your own words and the agent picks the skill up by itself.
+> "unslop esta tela para ela parar de parecer gerada por IA"
+
+Ou carregue a skill diretamente:
 
 ```
-/unslop this dashboard
-/unslop the hero of https://example.com
-/unslop my landing page and make the story video so I can post it
+skill({ name: "unslop" })
 ```
 
-It audits the screen and proposes a direction before it edits anything, so you can steer it early. If the screen is already good, it tells you so and suggests a few small refinements instead of redesigning it.
+Depois passe o que deseja (arquivo, pasta, URL de um site ao vivo ou descrição em palavras próprias). A skill:
 
-## What it does
+1. Audita a tela listando todos os sinais de slop com onde estão.
+2. Propõe uma direção (produto, caráter, mundo, momentos, assinatura) antes de editar anything — você pode ajustar.
+3. Aplica nove passes, em ordem: espaçamento, cor, ícones, copy, tipografia, layout, detalhes, visuais, movimento.
+4. Gera um relatório com o que mudou em cada pass.
 
-- **Audit.** Lists every sign of slop with where it lives.
-- **Direction.** Character, world, the one or two moments that carry the color, and a signature detail, all taken from your product.
-- **Passes.** Spacing, color, icons, copy, type, layout, details, visuals and motion, in that order.
-- **Visuals.** Shows your product instead of a glossy blob. When a hero needs a scene or an object, it can generate one through an image service like fal, Replicate, OpenAI images or Higgsfield. If none is connected, it offers to connect one as an MCP server, and it shows the prompt and asks before every paid generation. Dashboards and apps rarely need one.
-- **Story video.** A square video under 10 seconds of your screen unslopping itself, ready to post. It needs Playwright and ffmpeg.
+## Conteúdo da skill
 
-Try it on the two vibecoded screens in [examples](examples).
+```
+.opencode/skills/unslop/
+├── SKILL.md          # instruções (9 passes + direção + checklist + story video)
+├── references/       # signs, tokens, visuals, effects, refs + imagens de referência
+└── scripts/          # snapshot.mjs e story.mjs (Playwright + ffmpeg para vídeo da história)
+```
 
-## Hire the unslopper
+A pasta `agents/openai.yaml` do original (específica do Codex) foi intencionalmente removida, pois não é usada pelo OpenCode.
 
-Would rather have a designer do it? Damir unslops one key screen in 3 days, built in your stack, at [heydamir.design/unslop](https://heydamir.design/unslop).
+## Crédito
 
-## License
-
-[CC BY 4.0](LICENSE). Use it, change it and share it, including commercially, as long as you credit Damir Sokolovsky ([@heydamir](https://x.com/heydamir)) and link back to this repository.
+Mantenha o crédito a Damir Sokolovsky ([@heydamir](https://x.com/heydamir)) e o link de volta para o repositório original, como exige a licença CC BY 4.0.
